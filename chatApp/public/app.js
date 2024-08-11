@@ -1,4 +1,3 @@
-const { Socket } = require("socket.io")
 
 document.addEventListener("DOMContentLoaded", function () {
     const signupForm = document.getElementById('signupForm')
@@ -13,20 +12,20 @@ document.addEventListener("DOMContentLoaded", function () {
             const username = document.getElementById('username')
             const password = document.getElementById('password')
             try {
-                const res = await fetch('/auth/signup', {
-                    method: 'POST',
+                const res = await fetch("/auth/signup", {
+                    method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ username, password })
-                })
-
+                    body: JSON.stringify({ username, password }),
+                });
+                console.log(res);
                 if (res.status == 201) {
                     window.location.href = "login.html"
                     alert('Signup succesfull')
                 } else {
                     const err = await res.json();
-                    console.log(err.error)
+                    console.log('line 28', err.error)
                 }
             } catch (err) {
                 console.log('ERROR', err)

@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
-const sequelize = new Sequelize("chatapp", "root", "root", {
+const sequelize = new Sequelize("chatapp", "root", "password", {
     host: "localhost",
-    dialect: "password",
+    dialect: "mysql",
 });
 
 sequelize.authenticate().then(() => {
