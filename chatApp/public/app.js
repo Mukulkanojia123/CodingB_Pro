@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (signupForm) {
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault()
-            const username = document.getElementById('username')
-            const password = document.getElementById('password')
+            const username = document.getElementById('username').value
+            const password = document.getElementById('password').value
+            console.log('frontend', username, password)
             try {
                 const res = await fetch("/auth/signup", {
                     method: "POST",
@@ -37,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault()
-            const username = document.getElementById('username')
-            const password = document.getElementById('password')
+            const username = document.getElementById('username').value
+            const password = document.getElementById('password').value
             try {
                 const res = await fetch('/auth/login', {
                     method: 'POST',
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
             messagesBox.appendChild(userMsge)
         })
         // sending message through socket
-        messageForm.addEventListener.apply('submit', (e) => {
+        messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const msgText = document.getElementById('message').value
             socket.emit('message', msgText)

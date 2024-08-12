@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { User } = require('../model/user')
+const { User } = require('../model/DB')
 
 const router = express.Router()
 
@@ -11,10 +11,10 @@ router.get('/hello', (req, res) => {
 
 router.post('/signup', async (req, res) => {
     const { username, password } = req.body;
-    console.log(typeof (password))
+    console.log("signup error", password, typeof (password))
     const hashpassword = await bcrypt.hash(password, 10);
     try {
-        const user = await User.create({ username, password: hashpassword });
+        const user = await User.create({ username, password: hashpassword })
         res.status(201).json(user);
     } catch (err) {
         console.log("ERROR", err);
@@ -25,8 +25,9 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body
-    const user = User.findOne({ where: username })
-    if (user && (await bycrypt.compare(password, user.password))) {
+    const user = await User.findOne({ where: { username } })
+    // console.log(user);
+    if (user && (await bcrypt.compare(password, user.password))) {
         const token = jwt.sign({ id: user.id, password: user.password }, 'secret')
         res.status(200).json({ token: token })
     } else {

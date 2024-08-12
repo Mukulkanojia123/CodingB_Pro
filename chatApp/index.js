@@ -17,23 +17,24 @@ app.use("/auth", auth);
 io.use(async (socket, next) => {
     const token = socket.handshake.auth.token;
     try {
-        const payload = jwt.verify(token, 'secret');  // verify user
-        socket.user = User.findByPk(payload.id);     // find the user using in id in payload put on socket.user
+        const payload = jwt.verify(token, "secret"); //checks
+        socket.user = await User.findByPk(payload.id);
         next();
-    } catch (err) {
-        next(new Error('Authentication error'))
+    } catch (error) {
+        next(new Error("Authentication error"));
     }
-})
+});
 
 // this is trigger when any one connected to server 
-io.on('connection', (socket) => {
-    console.log(`user ${socket.user.username} connected`)
+io.on("connection", (socket) => {
+    // connection starts
+    console.log(`User ${socket.user.username} connected`);
 
-    socket.on(async (text) => {
-        const message = await Message.create({ text, UserId: socket.user.id })    // save message
-        io.emit('message', { text: message.text, user: socket.user.username })   // send
-    })
-})
+    socket.on("message", async (text) => {
+        const message = await Message.create({ text, UserId: socket.user.id }); // saves
+        io.emit("message", { text: message.text, user: socket.user.username }); // sends
+    });
+});
 
 server.listen(3000, () => {
     console.log("server in listen")
